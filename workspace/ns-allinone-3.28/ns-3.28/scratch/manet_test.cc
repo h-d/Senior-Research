@@ -77,6 +77,7 @@
  #include "ns3/dsr-module.h"
  #include "ns3/applications-module.h"
  #include "ns3/yans-wifi-helper.h"
+ #include "ns3/flow-monitor-module.h"
  
  using namespace ns3;
  using namespace dsr;
@@ -115,7 +116,7 @@
      packetsReceived (0),
      m_CSVfileName ("manet-routing.output.csv"),
      m_traceMobility (false),
-     m_protocol (4) //dsr
+     m_protocol (1) //olsr
  {
  }
  
@@ -190,7 +191,7 @@
    CommandLine cmd;
    cmd.AddValue ("CSVfileName", "The name of the CSV output file name", m_CSVfileName);
    cmd.AddValue ("traceMobility", "Enable mobility tracing", m_traceMobility);
-   cmd.AddValue ("protocol", "1=OLSR;2=AODV;3=DSDV;4=DSR", m_protocol);
+   cmd.AddValue ("protocol", "1=OLSR;2=AODV;3=DSR", m_protocol);
    cmd.Parse (argc, argv);
    return m_CSVfileName;
  }
@@ -212,7 +213,7 @@
    std::endl;
    out.close ();
  
-   int nSinks =18;
+   int nSinks =2;
    double txp = 7.5;
  
    experiment.Run (nSinks, txp, CSVfileName);
@@ -226,7 +227,7 @@
    m_txp = txp;
    m_CSVfileName = CSVfileName;
  
-   int nWifis = 90;
+   int nWifis = 10;
  
    double TotalTime = 200.0;
    std::string rate ("2048bps");
@@ -310,22 +311,18 @@
        m_protocolName = "AODV";
        break;
      case 3:
-       list.Add (dsdv, 100);
-       m_protocolName = "DSDV";
-       break;
-     case 4:
        m_protocolName = "DSR";
        break;
      default:
        NS_FATAL_ERROR ("No such protocol:" << m_protocol);
      }
  
-   if (m_protocol < 4)
+   if (m_protocol < 3)
      {
        internet.SetRoutingHelper (list);
        internet.Install (adhocNodes);
      }
-   else if (m_protocol == 4)
+   else if (m_protocol == 3)
      {
        internet.Install (adhocNodes);
        dsrMain.Install (dsr, adhocNodes);
@@ -355,7 +352,7 @@
        temp.Stop (Seconds (TotalTime));
      }
  
-   /*std::stringstream ss;
+   std::stringstream ss;
    ss << nWifis;
    std::string nodes = ss.str ();
  
@@ -373,26 +370,26 @@
  
    NS_LOG_INFO ("Configure Tracing.");
    tr_name = tr_name + "_" + m_protocolName +"_" + nodes + "nodes_" + sNodeSpeed + "speed_" + sNodePause + "pause_" + sRate + "rate";
- */
+ 
    //AsciiTraceHelper ascii;
    //Ptr<OutputStreamWrapper> osw = ascii.CreateFileStream ( (tr_name + ".tr").c_str());
-  // wifiPhy.EnableAsciiAll (osw);
+   //wifiPhy.EnableAsciiAll (osw);
    //MobilityHelper::EnableAsciiAll (ascii.CreateFileStream (tr_name + ".mob"));
    wifiPhy.EnablePcap("scratch/scenario",adhocDevices);
  
-   //Ptr<FlowMonitor> flowmon;
-   //FlowMonitorHelper flowmonHelper;
-   //flowmon = flowmonHelper.InstallAll ();
- 
+   FlowMonitorHelper flowmon;
+   Ptr<FlowMonitor> monitor = flowmon.InstallAll();
+   monitor = flowmon.GetMonitor();
  
    NS_LOG_INFO ("Run Simulation.");
  
-   //CheckThroughput ();
+   CheckThroughput ();
  
    Simulator::Stop (Seconds (TotalTime));
    Simulator::Run ();
  
-   //flowmon->SerializeToXmlFile ((tr_name + ".flowmon").c_str(), false, false);
+   monitor->CheckForLostPackets();
+   monitor->SerializeToXmlFile ((tr_name + ".flowmon").c_str(), false, false);
  
    Simulator::Destroy ();
  }
