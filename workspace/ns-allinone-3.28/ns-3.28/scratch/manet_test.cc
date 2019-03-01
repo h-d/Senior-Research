@@ -115,7 +115,7 @@
      packetsReceived (0),
      m_CSVfileName ("manet-routing.output.csv"),
      m_traceMobility (false),
-     m_protocol (2) // AODV
+     m_protocol (4) //dsr
  {
  }
  
@@ -212,7 +212,7 @@
    std::endl;
    out.close ();
  
-   int nSinks = 10;
+   int nSinks =18;
    double txp = 7.5;
  
    experiment.Run (nSinks, txp, CSVfileName);
@@ -226,7 +226,7 @@
    m_txp = txp;
    m_CSVfileName = CSVfileName;
  
-   int nWifis = 50;
+   int nWifis = 90;
  
    double TotalTime = 200.0;
    std::string rate ("2048bps");
@@ -387,7 +387,7 @@
  
    NS_LOG_INFO ("Run Simulation.");
  
-   CheckThroughput ();
+   //CheckThroughput ();
  
    Simulator::Stop (Seconds (TotalTime));
    Simulator::Run ();

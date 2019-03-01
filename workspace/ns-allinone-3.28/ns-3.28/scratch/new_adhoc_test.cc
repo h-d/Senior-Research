@@ -5,6 +5,7 @@
 #include "ns3/wifi-module.h"
 #include "ns3/internet-module.h"
 #include "ns3/aodv-module.h"
+#include "ns3/dsr-module.h"
 #include "ns3/olsr-module.h"
 #include "ns3/dsdv-module.h"
 #include "ns3/ipv4-static-routing-helper.h"
@@ -23,6 +24,9 @@
 NS_LOG_COMPONENT_DEFINE ("scenario");
 
 using namespace ns3;
+using namespace dsr;
+
+
 
 Ptr<ConstantVelocityMobilityModel> cvmm;
 double position_interval = 1.0;
@@ -68,7 +72,7 @@ int main (int argc, char *argv[])
   std::string phyMode = "DsssRate1Mbps";               
   //phyMode = "DsssRate11Mbps";
 
-  int bottomrow = 200;            // number of bottom-row nodes
+  int bottomrow = 100;            // number of bottom-row nodes
   int spacing = 100;            // between bottom-row nodes
   int mheight = 150;            // height of mover above bottom row
   int brheight = 50;            // height of bottom row
@@ -129,7 +133,7 @@ int main (int argc, char *argv[])
  
   int Ypos = 0;
 	
-  for (int t = 0; t < 20; t++)
+  for (int t = 0; t < 10; t++)
   {
   	int Xpos = 0;
   	for (int i=0; i<10; i++) {
@@ -157,14 +161,17 @@ int main (int argc, char *argv[])
 
   AodvHelper aodv;
   OlsrHelper olsr;
-  DsdvHelper dsdv;
+  DsrHelper dsr;
+  DsrMainHelper dsrMain;
   Ipv4ListRoutingHelper listrouting;
-  listrouting.Add(olsr, 200);                          // generates less traffic
-  //listrouting.Add(aodv, 10);                            // fastest to find new routes
+  listrouting.Add(olsr, 100);                          // generates less traffic
+  //listrouting.Add(dsr,100);
+  //listrouting.Add(aodv, 900);                            // fastest to find new routes
 
   InternetStackHelper internet;
   internet.SetRoutingHelper(listrouting);
   internet.Install (fixedpos);
+  //dsrMain.Install(dsr,fixedpos);
   //internet.Install (mover);
 
   Ipv4AddressHelper ipv4;
@@ -204,7 +211,7 @@ int main (int argc, char *argv[])
 
     
   
-  Simulator::Stop(Seconds (60));
+  Simulator::Stop(Seconds (30));
   
   FlowMonitorHelper flowmon;
   Ptr<FlowMonitor> monitor = flowmon.Install(fixedpos);
