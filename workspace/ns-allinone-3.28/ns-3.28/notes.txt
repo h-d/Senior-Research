@@ -1,0 +1,21 @@
+OLSR
+
+Note: Convergence calculated as (packetloss * packetsize)/packetpersec
+
+(AVG/MOV)
+
+nodes,	packetloss,	delay,		convergence,		throughput
+10,	146		1.086236639s	(146 * 90B)/86.2	7.75k
+20,	133		4.865069083s	(133 * 94B)/307.0	28k
+30,	487		34.467024272s	(487 * 102B)/755.1	76k
+40,	433		24.389421228s	(433 * 103B)/1349.5	138k
+50,	1055		52.279915798s	(1055 * 104B)/2652.9	276k
+
+(AVG/ST)	
+nodes,	packetloss,	delay,		convergence,		throughput
+10,
+20,
+30,
+40,
+50,
+

@@ -233,7 +233,7 @@
    std::string rate ("2048bps");
    std::string phyMode ("DsssRate11Mbps");
    std::string tr_name ("manet-routing-compare");
-   int nodeSpeed = 20; //in m/s
+   int nodeSpeed = 0; //in m/s
    int nodePause = 0; //in s
    m_protocolName = "protocol";
  
