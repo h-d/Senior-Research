@@ -1,21 +1,76 @@
 OLSR
 
-Note: Convergence calculated as (packetloss * packetsize)/packetpersec
+Note: Convergence calculated as (packetloss * packetsize)/bytespersec
 
 (AVG/MOV)
 
-nodes,	packetloss,	delay,		convergence,		throughput
-10,	146		1.086236639s	(146 * 90B)/86.2	7.75k
-20,	133		4.865069083s	(133 * 94B)/307.0	28k
-30,	487		34.467024272s	(487 * 102B)/755.1	76k
-40,	433		24.389421228s	(433 * 103B)/1349.5	138k
-50,	1055		52.279915798s	(1055 * 104B)/2652.9	276k
+nodes,	delay,		throughput,	packetloss,	convergence
+10,	1.086236639s	7.75k		(120)57		(57 * 117B)/49k
+20,	4.865069083s	28k		(140)108	(108 * 112B)/57k
+30,	34.467024272s	76k		(160)246	(246 * 107B)/65k		
+40,	24.389421228s	138k		(180)382	(382 * 103B)/74k	
+50,	52.279915798s	276k		(200)487	(487 * 102B)/76k
+					(220)		
+					(240)
+					(260)
+					(280)
+					(300)
+(AVG/ST)
+nodes,	delay,		throughput,	packetloss,	convergence
+10,	.117947125s	2.9k		0		N/A
+20,	3.958579688s	18k		8		(8 * 128B)/28k
+30,	12.967661173s	39k		11		(11 * 123B)/31k
+40,	71.146545852s	132k		12		(12 * 118B)/34k
+50,	85.846045254s	211k		61		(61 * 111B)/39k
 
-(AVG/ST)	
+(DENSE/ST)
+nodes,	delay,		throughput,	packetloss,	convergence
+10,	9.594129176s	8.7k		36		(36 * 127B)/75k	
+20,	8.533608923s	51k		54		(54 * 111B)/91k
+30,	17.951159529s	125k		65		(65 * 105B)/104k
+40,	16.984580577s	196k		81		(81 * 101B)/115k
+50,	57.378696029s	382k		84		(84 * 99B)/125k
+
+(DENSE/MOV)
+nodes,	delay,		throughput,	packetloss,	convergence
+10,	2.757548156s	8.7k		1		(1 * 142B)/92k
+20,	9.640160924s	50k		41		(41 * 126B)/113k
+30,	21.094611413s	141k		90		(90 * 118B)/125k
+40,	21.914270333s	263k		121		(121 * 113B)/134k
+50,	63.888678414s	465k		129		(129 * 110B)/141k
+
+AODV
+
+(AVG/MOV)
 nodes,	packetloss,	delay,		convergence,		throughput
-10,
-20,
-30,
-40,
-50,
+10,	61		0.403928699s	(61 * 69B)/57k		9.7k
+20,	116		9.771862812s	(116 * 67B)/84k		32k
+30,	234		33.307665583s	(234 * 68B)/100k	117k	
+40,	333		54.984436679s	(333 * 71B)/110k	295k
+50,	487		77.752623501s	(487 * 74B)/117k	476k
+
+(AVG/ST)
+nodes,	packetloss,	delay,		convergence,		throughput
+10,	102    		0.118247125s	(102 * 75B)/35k		3.9k
+20,	305    		57.657907354s	(305 * 72B)/48k		35k	
+30,	524		19.596234496s	(524 * 71B)/54k		67k
+40,	743    		65.884703841s	(743 * 73B)/60k		190k
+50,	980		86.523923448s	(980 * 71B)/67k		403k
+
+(DENSE/ST)
+nodes,	packetloss,	delay,		convergence,		throughput
+10,	5		5.113217444s	(5 * 67B)/96k		9.7k
+20,	46		2.552201471s	(46 * 65B)/132k		53k
+30,	73		17.576982345s	(73 * 65B)/144k		206k
+40,	109		8.590685664s	(109 * 63B)/167k	387k
+50,	128		18.447588547s	(128 * 62B)/206k	780k
+
+(DENSE/MOV)
+nodes,	packetloss,	delay,		convergence,		throughput
+10,	21		4.927150574s	(21 * 65B)/107k		8.5k	
+20,	56		9.550403912s	(56 * 62B)/172k		59k
+30,	91		6.745612387s	(91 * 62B)/201k		251k
+40,	140		38.432149621s	(140 * 62B)/231k	546k
+50,	196		44.689852929s	(196 * 61B)/251k	937k
+
 

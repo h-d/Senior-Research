@@ -213,7 +213,7 @@
    std::endl;
    out.close ();
  
-   int nSinks =2;
+   int nSinks =6;
    double txp = 7.5;
  
    experiment.Run (nSinks, txp, CSVfileName);
@@ -227,13 +227,13 @@
    m_txp = txp;
    m_CSVfileName = CSVfileName;
  
-   int nWifis = 10;
+   int nWifis = 30;
  
-   double TotalTime = 200.0;
+   double TotalTime = 300.0;
    std::string rate ("2048bps");
    std::string phyMode ("DsssRate11Mbps");
    std::string tr_name ("manet-routing-compare");
-   int nodeSpeed = 0; //in m/s
+   int nodeSpeed = 20; //in m/s
    int nodePause = 0; //in s
    m_protocolName = "protocol";
  
@@ -273,8 +273,8 @@
  
    ObjectFactory pos;
    pos.SetTypeId ("ns3::RandomRectanglePositionAllocator");
-   pos.Set ("X", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=300.0]"));
-   pos.Set ("Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=1500.0]"));
+   pos.Set ("X", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=150.0]"));
+   pos.Set ("Y", StringValue ("ns3::UniformRandomVariable[Min=0.0|Max=750.0]"));
  
    Ptr<PositionAllocator> taPositionAlloc = pos.Create ()->GetObject<PositionAllocator> ();
    streamIndex += taPositionAlloc->AssignStreams (streamIndex);
