@@ -48,6 +48,7 @@
 #include "ns3/trace-source-accessor.h"
 #include "ns3/ipv4-header.h"
 #include "ns3/ipv4-packet-info-tag.h"
+#include <random>
 
 /********** Useful macros **********/
 
@@ -470,6 +471,7 @@ RoutingProtocol::RecvOlsr (Ptr<Socket> socket)
                     << " TTL=" << int (messageHeader.GetTimeToLive ())
                     << " origAddr=" << messageHeader.GetOriginatorAddress ());
       messages.push_back (messageHeader);
+      packets_received++;
     }
 
   m_rxPacketTrace (olsrPacketHeader, messages);
@@ -954,6 +956,59 @@ RoutingProtocol::GetMainAddress (Ipv4Address iface_addr) const
 void
 RoutingProtocol::RoutingTableComputation ()
 {
+ 
+  /*std::random_device dev;
+  std::mt19937 rng(dev());
+  std::uniform_int_distribution<std::mt19937::result_type> dist6(1,7);
+
+
+  int will = (int)dist6(rng);
+
+  m_willingness = will;
+  */
+  
+  //std::ostringstream oss;
+  //int rec = packets_received;
+  int sent = packets_sent;
+
+  int bandwidth = 0;
+  int distance = 0;
+
+  int will;
+
+  const NeighborSet &neighborSet = m_state.GetNeighbors ();
+  for (NeighborSet::const_iterator it = neighborSet.begin (); it != neighborSet.end (); it++)
+  {
+    bandwidth++;
+  }
+
+  distance = 31-bandwidth;
+
+  const TwoHopNeighborSet &twoHopNeighbors = m_state.GetTwoHopNeighbors ();
+  /*for (TwoHopNeighborSet::const_iterator it = twoHopNeighbors.begin ();
+       it != twoHopNeighbors.end (); it++)
+  {
+    TwoHopNeighborTuple const &nb2hop_tuple = *it;
+    if (m_state.FindSymNeighborTuple (nb2hop_tuple.twoHopNeighborAddr)&&nb2hop_tuple.twoHopNeighborAddr != m_mainAddress)
+    {
+      n2++;
+    }
+  }
+*/
+  will =(sent * bandwidth)/distance;
+
+  m_willingness = will;
+
+  
+  //oss<<"rec: " << rec<< ", sent: "<<sent<<", bandwidth: "<<bandwidth<<", distance: "<<distance<<", will: "<<will;
+ 
+  //std::string test = oss.str();
+
+  //NS_LOG_UNCOND(test);
+  
+
+ // NS_LOG_UNCOND(will);
+ 	
   NS_LOG_DEBUG (Simulator::Now ().GetSeconds () << " s: Node " << m_mainAddress
                                                 << ": RoutingTableComputation begin...");
 
@@ -962,7 +1017,6 @@ RoutingProtocol::RoutingTableComputation ()
 
   // 2. The new routing entries are added starting with the
   // symmetric neighbors (h=1) as the destination nodes.
-  const NeighborSet &neighborSet = m_state.GetNeighbors ();
   for (NeighborSet::const_iterator it = neighborSet.begin ();
        it != neighborSet.end (); it++)
     {
@@ -1029,7 +1083,6 @@ RoutingProtocol::RoutingTableComputation ()
   //  least one entry in the 2-hop neighbor set where
   //  N_neighbor_main_addr correspond to a neighbor node with
   //  willingness different of WILL_NEVER,
-  const TwoHopNeighborSet &twoHopNeighbors = m_state.GetTwoHopNeighbors ();
   for (TwoHopNeighborSet::const_iterator it = twoHopNeighbors.begin ();
        it != twoHopNeighbors.end (); it++)
     {
@@ -1607,6 +1660,7 @@ RoutingProtocol::ForwardDefault (olsr::MessageHeader olsrMessage,
                            &RoutingProtocol::DupTupleTimerExpire, this,
                            newDup.address, newDup.sequenceNumber);
     }
+  packets_sent++;
 }
 
 void
@@ -1643,6 +1697,8 @@ RoutingProtocol::SendPacket (Ptr<Packet> packet,
       Ipv4Address bcast = i->second.GetLocal ().GetSubnetDirectedBroadcast (i->second.GetMask ());
       i->first->SendTo (pkt, 0, InetSocketAddress (bcast, OLSR_PORT_NUMBER));
     }
+
+  packets_sent++;
 }
 
 void

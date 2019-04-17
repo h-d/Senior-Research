@@ -116,7 +116,7 @@
      packetsReceived (0),
      m_CSVfileName ("manet-routing.output.csv"),
      m_traceMobility (false),
-     m_protocol (2) //aodv
+     m_protocol (1) //olsr
  {
  }
  
